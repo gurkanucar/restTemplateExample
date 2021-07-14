@@ -2,6 +2,7 @@ package com.gucarsoft.resttemplateexample.service;
 
 import com.gucarsoft.resttemplateexample.dto.PostDto;
 import com.gucarsoft.resttemplateexample.dto.converter.PostDtoConverter;
+import com.gucarsoft.resttemplateexample.exception.PostNotFoundException;
 import com.gucarsoft.resttemplateexample.model.Post;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -31,15 +32,36 @@ public class RestTemplateService {
         this.postDtoConverter = postDtoConverter;
     }
 
-    public List<?> getAllPosts() {
-        ResponseEntity<List<Post>> result = restTemplate.exchange(
-                apiBaseUrl + "/posts",
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Post>>() {
-                });
-
-        return result
-                .getBody()
+    public List<PostDto> getAllPosts() {
+        return getPostList()
                 .stream()
                 .map(postDtoConverter::convert).collect(Collectors.toList());
     }
+
+    public List<PostDto> getPostBySearch(String search) {
+        return getPostList()
+                .stream()
+                .map(postDtoConverter::convert)
+                .filter(x -> x.getBody().toString().contains(search))
+                .collect(Collectors.toList());
+    }
+
+
+    public PostDto getPostById(Long id) throws PostNotFoundException {
+        PostDto postDto = postDtoConverter.convert(Objects.requireNonNull(restTemplate.getForObject(
+                apiBaseUrl + "/posts/" + id,
+                Post.class)));
+        return postDto;
+    }
+
+
+
+
+    protected List<Post> getPostList() {
+        return restTemplate.exchange(
+                apiBaseUrl + "/posts",
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<Post>>() {
+                }).getBody();
+    }
+
 }
