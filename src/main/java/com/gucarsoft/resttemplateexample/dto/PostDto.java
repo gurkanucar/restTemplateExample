@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class PostDto {
 
     @NotNull
-    private Long userID;
+    private Long userId;
 
     @NotNull
     @NotBlank
