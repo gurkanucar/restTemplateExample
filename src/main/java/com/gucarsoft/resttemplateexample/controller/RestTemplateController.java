@@ -37,11 +37,10 @@ public class RestTemplateController {
     }
 
 
-/*
     @PostMapping
-    public ResponseEntity<List<PostDto>> createPost(@Valid @RequestBody PostDto post) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto post) {
         return ResponseEntity.ok(restTemplateService.create(post));
     }
-*/
+
 
 }
