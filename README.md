@@ -20,7 +20,14 @@ GET       [/restTemplate/search/{search}](http://localhost:8080/api/restTemplate
 
 POST     [/restTemplate](http://localhost:8080/api/restTemplate)   → returns postDTO after success creation
 
-
+PostDTO model:
+```json
+{
+  "title":"test title",
+  "body":"this is body",
+  "userId":4
+}
+```
 
 ### Exception Handling
 
